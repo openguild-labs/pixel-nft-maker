@@ -1,11 +1,8 @@
 import { Button, Col, Row } from "antd";
 import React, { useState } from "react";
 import Pixel from "./Pixel";
-import {
-  BitmapMethod,
-  TINY_CAT_NFT_BITMAP,
-  TINY_CAT_NFT_COLOR_KIT,
-} from "./bitmap/nft";
+import { BitmapMethod, NFT_BITMAP, TINY_CAT_NFT_COLOR_KIT } from "./bitmap/nft";
+import { getRandomArrIndex } from "./utils";
 
 type Props = {
   rows: number;
@@ -42,7 +39,9 @@ const PixelEditor = ({ rows, cols }: Props) => {
     layerMethod: string,
     generatedLayer: Record<string, any>
   ) => {
-    const method = (TINY_CAT_NFT_BITMAP as any)[layerMethod] as BitmapMethod;
+    const methods = (NFT_BITMAP as any)[layerMethod] as BitmapMethod[];
+    const method = methods[getRandomArrIndex(methods)] as BitmapMethod;
+
     const layerColorKit = (TINY_CAT_NFT_COLOR_KIT as any)[layerMethod];
     generatedLayer[layerMethod] =
       typeof layerColorKit === "string"
@@ -61,7 +60,7 @@ const PixelEditor = ({ rows, cols }: Props) => {
 
   const renderOneNftLayers = () => {
     const generatedLayers = {};
-    return Object.keys(TINY_CAT_NFT_BITMAP).map((layerMethod) => {
+    return Object.keys(NFT_BITMAP).map((layerMethod) => {
       const { trackedCells } = buildGridFromMethod(
         layerMethod,
         generatedLayers

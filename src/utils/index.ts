@@ -72,3 +72,7 @@ export function generateRandomDarkColor() {
 
   return colorCode;
 }
+
+export function getRandomArrIndex(list: any[]) {
+  return Math.floor(Math.random() * list.length);
+}
