@@ -1,8 +1,9 @@
 import { Button, Col, Row } from "antd";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Pixel from "./Pixel";
 import { BitmapMethod, NFT_BITMAP, TINY_CAT_NFT_COLOR_KIT } from "./bitmap/nft";
 import { getRandomArrIndex } from "./utils";
+import html2canvas from "html2canvas";
 
 type Props = {
   rows: number;
@@ -34,6 +35,7 @@ export const emptyArray = (size: number, defaultValue?: any) =>
   new Array(size).fill(defaultValue !== undefined ? defaultValue : undefined);
 
 const PixelEditor = ({ rows, cols }: Props) => {
+  const printRef = useRef(null);
   const [nfts, setNfts] = useState<React.ReactNode[]>([]);
   const buildGridFromMethod = (
     layerMethod: string,
@@ -98,6 +100,27 @@ const PixelEditor = ({ rows, cols }: Props) => {
     ]);
   };
 
+  const convertReactComponentToImageData = async (element: HTMLDivElement) => {
+    const canvas = await html2canvas(element, {
+      allowTaint: true,
+      useCORS: true,
+    });
+
+    return canvas.toDataURL("image/png");
+  };
+
+  const handleDownloadImage = async () => {
+    const element = printRef.current;
+    if (!element) return;
+    const data = await convertReactComponentToImageData(element);
+    const link = document.createElement("a");
+    link.href = data;
+    link.download = `OpenGuild_Characters.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const intervalRef = useInterval(() => {
     if (nfts.length < 0) {
       handleGenerate();
@@ -109,7 +132,10 @@ const PixelEditor = ({ rows, cols }: Props) => {
   return (
     <div>
       <Button onClick={handleGenerate}>Generate</Button>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>{nfts}</div>
+      <Button onClick={handleDownloadImage}>Download Images</Button>
+      <div ref={printRef}>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>{nfts}</div>
+      </div>
     </div>
   );
 };

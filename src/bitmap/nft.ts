@@ -15,7 +15,7 @@ export type BitmapMethod = (color: string) => {
 
 export const TINY_CAT_NFT_SIZE = { rows: 14, cols: 14 };
 export const TINY_CAT_NFT_COLOR_KIT: Record<string, string | (() => string)> = {
-  generateBackground: generateLightColor,
+  // generateBackground: generateLightColor,
   generateBodyBase: generateLightColor,
   generateBodyAccessories: generateLightColor,
   generateEyes: generateRandomColor,
@@ -23,6 +23,14 @@ export const TINY_CAT_NFT_COLOR_KIT: Record<string, string | (() => string)> = {
   generateShirt: generateRandomColor,
   generateHandAccessories: generateRandomColor,
   generateHand: "generateBodyBase",
+  generateBackground: "",
+  // generateBodyBase: generateLightColor,
+  // generateBodyAccessories: generateLightColor,
+  // generateEyes: () => "red",
+  // generateMouth: generateLightColor,
+  // generateShirt: () => "black",
+  // generateHandAccessories: generateRandomColor,
+  // generateHand: "generateBodyBase",
 };
 
 export const NFT_BITMAP: Record<string, BitmapMethod[]> = {
